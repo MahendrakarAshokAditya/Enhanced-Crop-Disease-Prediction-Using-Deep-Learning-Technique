@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Enhancing Crop Disease Prediction Using Deep Learning{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #27ae60;
+            --secondary-color: #2ecc71;
+            --accent-color: #3498db;
+            --text-color: #2c3e50;
+            --light-bg: #f0f2f5;
+            --card-bg: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--light-bg), #e0e5ec);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.03);
+            font-weight: bold;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        
+        footer {
+            margin-top: auto;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+        
+        .image-preview {
+            min-height: 300px;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        .placeholder-content {
+            text-align: center;
+            color: #7f8c8d;
+        }
+        
+        .placeholder-icon {
+            font-size: 3rem;
+            color: #bdc3c7;
+            margin-bottom: 10px;
+        }
+        
+        .confidence-bar {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .result-card {
+            border-left: 5px solid;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .high-confidence {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.05));
+        }
+        
+        .medium-confidence {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.05));
+        }
+        
+        .low-confidence {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(231, 76, 60, 0.05));
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .card {
+                margin-bottom: 15px;
+            }
+            
+            .image-preview {
+                min-height: 200px;
+            }
+            
+            .image-preview img {
+                max-height: 200px;
+            }
+        }
+        
+        /* Splash screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #34c1c3, #febb2d);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .splash-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .splash-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .splash-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .splash-progress {
+            width: 300px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .splash-progress-bar {
+            height: 100%;
+            background-color: white;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 3s ease-in-out;
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        #camera-view {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+        
+        .camera-controls {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .detection-image-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 5px;
+            background-color: #f8f9fa;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .detection-image {
+            max-width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-title">Enhancing Crop Disease Prediction Using Deep Learning</div>
+            <div class="splash-subtitle">Using Deep Learning for Plant Health Analysis</div>
+            <div class="splash-progress">
+                <div class="splash-progress-bar" id="splash-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-leaf logo-icon"></i>
+                Enhancing Crop Disease Prediction Using Deep Learning
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/history"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow-sm mt-auto">
+        <div class="container">
+            <p class="mb-0">© 2025 Enhancing Crop Disease Prediction</p>
+            <p class="text-muted small">Using advanced deep learning technology to detect and analyze crop diseases for sustainable agriculture</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Splash screen animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBar = document.getElementById('splash-progress-bar');
+            const splashScreen = document.getElementById('splash-screen');
+            
+            // Animate progress bar
+            progressBar.style.width = '100%';
+            
+            // Hide splash screen after animation
+            setTimeout(function() {
+                splashScreen.style.opacity = '0';
+                setTimeout(function() {
+                    splashScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

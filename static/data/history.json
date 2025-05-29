@@ -1,0 +1,47 @@
+[
+    {
+        "id": "fe45b13b-5796-4dd7-9da1-95c630317503",
+        "date": "2025-04-09 23:56:48",
+        "disease_name": "Blueberry leaf",
+        "confidence": 97.907155752182,
+        "confidence_color": "#27ae60",
+        "plant_type": "Blueberry",
+        "description": "A healthy blueberry leaf showing normal characteristics.",
+        "symptoms": [
+            "Bright green color",
+            "No signs of disease"
+        ],
+        "treatment": [
+            "Maintain proper soil pH",
+            "Apply balanced fertilizer"
+        ],
+        "prevention": [
+            "Proper watering",
+            "Good air circulation",
+            "Regular pruning"
+        ],
+        "image_path": "static/uploads\\fe45b13b-5796-4dd7-9da1-95c630317503.png"
+    },
+    {
+        "id": "62e7d039-0800-4628-9574-0a97aa77bb8d",
+        "date": "2025-04-09 23:57:58",
+        "disease_name": "Corn rust leaf",
+        "confidence": 78.02571058273315,
+        "confidence_color": "#f39c12",
+        "plant_type": "Corn",
+        "description": "A fungal disease causing rust-colored pustules on corn leaves.",
+        "symptoms": [
+            "Rust-colored pustules on leaves",
+            "Leaf yellowing"
+        ],
+        "treatment": [
+            "Apply fungicides",
+            "Remove infected plant debris"
+        ],
+        "prevention": [
+            "Plant resistant varieties",
+            "Ensure proper field sanitation"
+        ],
+        "image_path": "static/uploads\\62e7d039-0800-4628-9574-0a97aa77bb8d.png"
+    }
+]

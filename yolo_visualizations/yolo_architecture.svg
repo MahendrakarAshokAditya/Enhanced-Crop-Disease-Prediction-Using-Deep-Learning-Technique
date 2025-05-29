@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700">
+  <!-- Background -->
+  <rect width="900" height="700" fill="#ffffff" />
+  
+  <!-- Title -->
+  <text x="450" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle" fill="#333333">YOLOv8 Architecture for Crop Disease Detection</text>
+  
+  <!-- Main Architecture Flow -->
+  <!-- Input -->
+  <rect x="50" y="100" width="120" height="80" rx="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" />
+  <text x="110" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#1565c0">Input Image</text>
+  <text x="110" y="165" font-family="Arial" font-size="12" text-anchor="middle" fill="#1565c0">(480×480×3)</text>
+  
+  <!-- Backbone -->
+  <rect x="220" y="100" width="140" height="80" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" />
+  <text x="290" y="135" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#2e7d32">CSPDarknet</text>
+  <text x="290" y="155" font-family="Arial" font-size="12" text-anchor="middle" fill="#2e7d32">Backbone</text>
+  <text x="290" y="170" font-family="Arial" font-size="12" text-anchor="middle" fill="#2e7d32">Feature Extraction</text>
+  
+  <!-- Neck -->
+  <rect x="410" y="100" width="140" height="80" rx="10" fill="#fff8e1" stroke="#f57f17" stroke-width="2" />
+  <text x="480" y="135" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#f57f17">PANet</text>
+  <text x="480" y="155" font-family="Arial" font-size="12" text-anchor="middle" fill="#f57f17">Neck</text>
+  <text x="480" y="170" font-family="Arial" font-size="12" text-anchor="middle" fill="#f57f17">Feature Fusion</text>
+  
+  <!-- Head -->
+  <rect x="600" y="100" width="140" height="80" rx="10" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2" />
+  <text x="670" y="135" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Detection Head</text>
+  <text x="670" y="155" font-family="Arial" font-size="12" text-anchor="middle" fill="#6a1b9a">Prediction</text>
+  <text x="670" y="170" font-family="Arial" font-size="12" text-anchor="middle" fill="#6a1b9a">Classification</text>
+  
+  <!-- Output -->
+  <rect x="790" y="100" width="60" height="80" rx="10" fill="#ffebee" stroke="#b71c1c" stroke-width="2" />
+  <text x="820" y="145" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#b71c1c">Output</text>
+  
+  <!-- Connecting Arrows -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333333" />
+    </marker>
+  </defs>
+  <line x1="170" y1="140" x2="220" y2="140" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <line x1="360" y1="140" x2="410" y2="140" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <line x1="550" y1="140" x2="600" y2="140" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <line x1="740" y1="140" x2="790" y2="140" stroke="#333333" stroke-width="2" marker-end="url(#arrowhead)" />
+  
+  <!-- Detailed Architecture Components -->
+  <text x="450" y="220" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#333333">Detailed Architecture Components</text>
+  
+  <!-- CSPDarknet Details -->
+  <rect x="50" y="250" width="250" height="180" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" opacity="0.8" />
+  <text x="175" y="275" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#2e7d32">CSPDarknet Backbone</text>
+  <text x="65" y="300" font-family="Arial" font-size="14" fill="#333333">• Conv + BatchNorm + SiLU</text>
+  <text x="65" y="325" font-family="Arial" font-size="14" fill="#333333">• Cross-Stage Partial Connections</text>
+  <text x="65" y="350" font-family="Arial" font-size="14" fill="#333333">• Residual Blocks</text>
+  <text x="65" y="375" font-family="Arial" font-size="14" fill="#333333">• Downsampling (2×, 4×, 8×, 16×)</text>
+  <text x="65" y="400" font-family="Arial" font-size="14" fill="#333333">• Multi-scale Feature Maps</text>
+  <text x="65" y="425" font-family="Arial" font-size="14" fill="#333333">• N_backbone: 17 layers</text>
+  
+  <!-- PANet Details -->
+  <rect x="325" y="250" width="250" height="180" rx="10" fill="#fff8e1" stroke="#f57f17" stroke-width="2" opacity="0.8" />
+  <text x="450" y="275" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#f57f17">PANet Neck</text>
+  <text x="340" y="300" font-family="Arial" font-size="14" fill="#333333">• Feature Pyramid Network (FPN)</text>
+  <text x="340" y="325" font-family="Arial" font-size="14" fill="#333333">• Path Aggregation Network</text>
+  <text x="340" y="350" font-family="Arial" font-size="14" fill="#333333">• Bottom-up & Top-down Pathways</text>
+  <text x="340" y="375" font-family="Arial" font-size="14" fill="#333333">• Skip Connections</text>
+  <text x="340" y="400" font-family="Arial" font-size="14" fill="#333333">• Multi-scale Feature Fusion</text>
+  <text x="340" y="425" font-family="Arial" font-size="14" fill="#333333">• N_neck: 7 layers</text>
+  
+  <!-- Detection Head Details -->
+  <rect x="600" y="250" width="250" height="180" rx="10" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2" opacity="0.8" />
+  <text x="725" y="275" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#6a1b9a">Detection Head</text>
+  <text x="615" y="300" font-family="Arial" font-size="14" fill="#333333">• Decoupled Detection Head</text>
+  <text x="615" y="325" font-family="Arial" font-size="14" fill="#333333">• Anchor-free Detection</text>
+  <text x="615" y="350" font-family="Arial" font-size="14" fill="#333333">• Object Classification</text>
+  <text x="615" y="375" font-family="Arial" font-size="14" fill="#333333">• Bounding Box Regression</text>
+  <text x="615" y="400" font-family="Arial" font-size="14" fill="#333333">• Distribution Focal Loss (DFL)</text>
+  <text x="615" y="425" font-family="Arial" font-size="14" fill="#333333">• N_head: 3 layers</text>
+  
+  <!-- Training Parameters -->
+  <rect x="50" y="450" width="800" height="100" rx="10" fill="#e0f7fa" stroke="#006064" stroke-width="2" opacity="0.8" />
+  <text x="450" y="475" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#006064">Training Hyperparameters</text>
+  
+  <!-- First row of parameters -->
+  <text x="150" y="500" font-family="Arial" font-size="14" fill="#333333">• Learning Rate: 0.01</text>
+  <text x="350" y="500" font-family="Arial" font-size="14" fill="#333333">• Batch Size: 16</text>
+  <text x="550" y="500" font-family="Arial" font-size="14" fill="#333333">• Image Size: 480×480</text>
+  <text x="750" y="500" font-family="Arial" font-size="14" fill="#333333">• Total Epochs: 70</text>
+  
+  <!-- Second row of parameters -->
+  <text x="150" y="530" font-family="Arial" font-size="14" fill="#333333">• Mosaic Prob: 0.3</text>
+  <text x="350" y="530" font-family="Arial" font-size="14" fill="#333333">• Mixup Prob: 0.15</text>
+  <text x="550" y="530" font-family="Arial" font-size="14" fill="#333333">• Weight Decay: 0.0005</text>
+  <text x="750" y="530" font-family="Arial" font-size="14" fill="#333333">• Warmup Epochs: 3</text>
+  
+  <!-- Crop Disease Classes -->
+  <rect x="50" y="570" width="800" height="110" rx="10" fill="#f9fbe7" stroke="#827717" stroke-width="2" opacity="0.8" />
+  <text x="450" y="595" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#827717">Crop Disease Classes</text>
+  
+  <!-- First row of classes -->
+  <text x="150" y="620" font-family="Arial" font-size="14" fill="#333333">• Apple Scab/Rust/Healthy</text>
+  <text x="350" y="620" font-family="Arial" font-size="14" fill="#333333">• Corn Gray Spot/Blight/Rust</text>
+  <text x="550" y="620" font-family="Arial" font-size="14" fill="#333333">• Potato Early/Late Blight</text>
+  <text x="750" y="620" font-family="Arial" font-size="14" fill="#333333">• Tomato Bacterial Spot</text>
+  
+  <!-- Second row of classes -->
+  <text x="150" y="650" font-family="Arial" font-size="14" fill="#333333">• Tomato Early/Late Blight</text>
+  <text x="350" y="650" font-family="Arial" font-size="14" fill="#333333">• Tomato Mosaic/Yellow Virus</text>
+  <text x="550" y="650" font-family="Arial" font-size="14" fill="#333333">• Grape Black Rot/Healthy</text>
+  <text x="750" y="650" font-family="Arial" font-size="14" fill="#333333">• Bell Pepper Spot/Healthy</text>
+  
+  <!-- Footer -->
+  <text x="450" y="690" font-family="Arial" font-size="12" text-anchor="middle" fill="#666666">Enhancing Crop Disease Detection Project - YOLOv8 Architecture</text>
+</svg>

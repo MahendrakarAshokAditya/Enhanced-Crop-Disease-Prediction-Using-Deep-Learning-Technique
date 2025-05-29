@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block title %}Crop Disease Detector - History Detail{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4 class="mb-0"><i class="fas fa-leaf me-2"></i> Disease Detection Details</h4>
+            </div>
+            <div class="card-body">
+                {% if not item %}
+                <div class="text-center py-5">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-color); opacity: 0.3;"></i>
+                    <h5 class="mt-3">Item Not Found</h5>
+                    <p class="text-muted">The requested history item could not be found.</p>
+                    <a href="/history" class="btn btn-primary mt-2">
+                        <i class="fas fa-history me-2"></i> Back to History
+                    </a>
+                </div>
+                {% else %}
+                <div class="row mb-4">
+                    <div class="col-md-5 text-center">
+                        <div class="detection-image-container mb-3">
+                            <img src="{{ item.image_path }}" alt="{{ item.disease_name }}" class="img-fluid detection-image">
+                        </div>
+                        <div class="d-flex justify-content-center mb-3">
+                            <span class="badge bg-primary me-2">{{ item.plant_type }}</span>
+                            <span class="badge" style="background-color: {{ item.confidence_color }};">{{ item.confidence }}% Confidence</span>
+                        </div>
+                        <p class="text-muted">
+                            <i class="fas fa-calendar-alt me-2"></i> {{ item.date }}
+                        </p>
+                    </div>
+                    <div class="col-md-7">
+                        <h4 class="mb-3">{{ item.disease_name }}</h4>
+                        <div class="progress mb-3" style="height: 10px;">
+                            <div class="progress-bar confidence-bar" 
+                                role="progressbar" 
+                                style="width: {{ item.confidence }}%; background-color: {{ item.confidence_color }};" 
+                                aria-valuenow="{{ item.confidence }}" 
+                                aria-valuemin="0" 
+                                aria-valuemax="100"></div>
+                        </div>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Description</h5>
+                                <p class="card-text">{{ item.description }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Symptoms</h5>
+                                        <ul class="mb-0">
+                                            {% if item.symptoms %}
+                                                {% for symptom in item.symptoms %}
+                                                    <li>{{ symptom }}</li>
+                                                {% endfor %}
+                                            {% else %}
+                                                <li>No symptoms information available</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Treatment</h5>
+                                        <ul class="mb-0">
+                                            {% if item.treatment %}
+                                                {% for treatment in item.treatment %}
+                                                    <li>{{ treatment }}</li>
+                                                {% endfor %}
+                                            {% else %}
+                                                <li>No treatment information available</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Prevention</h5>
+                                <ul class="mb-0">
+                                    {% if item.prevention %}
+                                        {% for prevention in item.prevention %}
+                                            <li>{{ prevention }}</li>
+                                        {% endfor %}
+                                    {% else %}
+                                        <li>No prevention information available</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Disease Progression Section -->
+                {% if related_items and related_items|length > 0 %}
+                <hr>
+                <h4 class="mb-3"><i class="fas fa-chart-line me-2"></i> Disease Progression</h4>
+                <p class="text-muted mb-4">Track how this disease has progressed over time on similar plants.</p>
+                
+                <div class="progression-timeline mb-4">
+                    <div class="row">
+                        {% for related in related_items %}
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100 {% if related.id == item.id %}border-primary{% endif %}">
+                                <div class="card-body text-center">
+                                    <div class="detection-image-container mb-2">
+                                        <img src="{{ related.image_path }}" alt="{{ related.date }}" class="img-fluid detection-image">
+                                    </div>
+                                    <p class="mb-1"><strong>{{ related.date }}</strong></p>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar" 
+                                            role="progressbar" 
+                                            style="width: {{ related.confidence }}%; background-color: {{ related.confidence_color }};" 
+                                            aria-valuenow="{{ related.confidence }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100"></div>
+                                    </div>
+                                    <p class="mb-0 small">{{ related.confidence }}% Confidence</p>
+                                </div>
+                                <div class="card-footer bg-transparent text-center">
+                                    <a href="/history/{{ related.id }}" class="btn btn-sm {% if related.id == item.id %}btn-primary disabled{% else %}btn-outline-primary{% endif %}">
+                                        {% if related.id == item.id %}Current{% else %}View{% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Compare with other detections -->
+                <hr>
+                <h4 class="mb-3"><i class="fas fa-exchange-alt me-2"></i> Compare with Other Detections</h4>
+                <p class="text-muted mb-4">Select another detection to compare side by side.</p>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <select id="compare-select" class="form-select">
+                            <option value="">Select a detection to compare...</option>
+                            {% for other in all_items %}
+                                {% if other.id != item.id %}
+                                <option value="{{ other.id }}">{{ other.disease_name }} ({{ other.date }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="compare-btn" class="btn btn-primary" disabled>
+                            <i class="fas fa-exchange-alt me-2"></i> Compare
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="comparison-container" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header text-center">
+                                    <h5 class="mb-0">Current: {{ item.disease_name }}</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="detection-image-container mb-3">
+                                        <img src="{{ item.image_path }}" alt="{{ item.disease_name }}" class="img-fluid detection-image">
+                                    </div>
+                                    <p class="mb-1"><strong>{{ item.date }}</strong></p>
+                                    <div class="progress mb-2" style="height: 8px;">
+                                        <div class="progress-bar" 
+                                            role="progressbar" 
+                                            style="width: {{ item.confidence }}%; background-color: {{ item.confidence_color }};" 
+                                            aria-valuenow="{{ item.confidence }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100"></div>
+                                    </div>
+                                    <p class="mb-3">{{ item.confidence }}% Confidence</p>
+                                    <p class="mb-0">{{ item.description | truncate(150) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="comparison-details" class="card">
+                                <!-- Comparison content will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="text-center mt-4">
+                    <a href="/history" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i> Back to History
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM Elements
+        const compareSelect = document.getElementById('compare-select');
+        const compareBtn = document.getElementById('compare-btn');
+        const comparisonContainer = document.getElementById('comparison-container');
+        const comparisonDetails = document.getElementById('comparison-details');
+        
+        // Event Listeners
+        if (compareSelect) {
+            compareSelect.addEventListener('change', function() {
+                compareBtn.disabled = !this.value;
+            });
+        }
+        
+        if (compareBtn) {
+            compareBtn.addEventListener('click', function() {
+                const selectedId = compareSelect.value;
+                if (!selectedId) return;
+                
+                // Fetch comparison data
+                fetch(`/history/${selectedId}/data`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            displayComparison(data.item);
+                        } else {
+                            alert('Error loading comparison data: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while loading comparison data');
+                    });
+            });
+        }
+        
+        // Functions
+        function displayComparison(comparisonItem) {
+            // Create HTML for comparison
+            const html = `
+                <div class="card-header text-center">
+                    <h5 class="mb-0">Comparison: ${comparisonItem.disease_name}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="detection-image-container mb-3">
+                        <img src="${comparisonItem.image_path}" alt="${comparisonItem.disease_name}" class="img-fluid detection-image">
+                    </div>
+                    <p class="mb-1"><strong>${comparisonItem.date}</strong></p>
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar" 
+                            role="progressbar" 
+                            style="width: ${comparisonItem.confidence}%; background-color: ${comparisonItem.confidence_color};" 
+                            aria-valuenow="${comparisonItem.confidence}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-3">${comparisonItem.confidence}% Confidence</p>
+                    <p class="mb-0">${comparisonItem.description.length > 150 ? comparisonItem.description.substring(0, 150) + '...' : comparisonItem.description}</p>
+                </div>
+            `;
+            
+            // Update comparison details and show container
+            comparisonDetails.innerHTML = html;
+            comparisonContainer.style.display = 'block';
+            
+            // Scroll to comparison
+            comparisonContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+</script>
+{% endblock %}
